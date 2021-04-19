@@ -21,6 +21,24 @@ services:
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"
       - "traefik.http.routers.traefik.rule=Host(`proxy.test`)"
 
+  portainer:
+    image: portainer/portainer-ce:2.1.1-alpine
+    restart: unless-stopped
+    command:
+      - "-H"
+      - "unix:///var/run/docker.sock"
+      - "--admin-password=${PORTAINER_ADMIN_PASS}"
+    networks:
+      webgateway:
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.test`)"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
 networks:
   webgateway:
 
+volumes:
+  portainer_data:

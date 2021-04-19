@@ -41,11 +41,11 @@
 
 ## Traefik
 
-Can be reached via [http://proxy.test]().
+Can be reached via [http://proxy.test](http://proxy.test).
 
 ## Portainer
 
-Can be reached via [http://portainer.test]().
+Can be reached via [http://portainer.test](http://portainer.test).
 
 ## SSL
 

@@ -8,14 +8,19 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.file.directory=/etc/traefik/dynamic"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
     restart: unless-stopped
     ports:
       - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
     networks:
       webgateway:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./services/traefik/files/etc/traefik/dynamic:/etc/traefik/dynamic
+      - ./services/traefik/files/etc/certs:/etc/certs
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.traefik.loadbalancer.server.port=8080"

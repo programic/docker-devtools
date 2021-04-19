@@ -1,0 +1,4 @@
+tls:
+  certificates:
+    - certFile: /etc/certs/pro.test-bundle.crt
+      keyFile: /etc/certs/pro.test.key

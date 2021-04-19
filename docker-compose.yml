@@ -37,6 +37,20 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.portainer.rule=Host(`portainer.test`)"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    restart: unless-stopped
+    networks:
+      webgateway:
+        aliases:
+          # mailtrap:1025
+          - mailtrap
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=Host(`mailtrap.test`)"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+
 networks:
   webgateway:
 

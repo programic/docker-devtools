@@ -9,15 +9,18 @@ services:
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
-    restart: always
+    restart: unless-stopped
     ports:
-      - "80:80"
-      - "8080:8080"
+      - 127.0.0.1:80:80
     networks:
-      - web
+      webgateway:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+      - "traefik.http.routers.traefik.rule=Host(`proxy.test`)"
 
 networks:
-  web:
-    external: true
+  webgateway:
+

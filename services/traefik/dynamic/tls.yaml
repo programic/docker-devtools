@@ -1,0 +1,7 @@
+tls:
+  certificates:
+    - certFile: /etc/traefik/certs/pro.test-bundle.crt
+      keyFile: /etc/traefik/certs/pro.test.key
+  options:
+    mintls13:
+      minVersion: VersionTLS13

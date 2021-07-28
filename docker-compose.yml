@@ -6,8 +6,9 @@ services:
     command:
 #      - "--log.level=DEBUG"
       - "--api.insecure=true"
-      - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=web"
+      - "--providers.docker.watch=true"
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
@@ -15,16 +16,13 @@ services:
     ports:
       - 127.0.0.1:80:80
       - 127.0.0.1:443:443
+      - 127.0.0.1:8080:8080
     networks:
-      webgateway:
+      - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./services/traefik/files/etc/traefik/dynamic:/etc/traefik/dynamic
-      - ./services/traefik/files/etc/certs:/etc/certs
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
-      - "traefik.http.routers.traefik.rule=Host(`proxy.test`)"
+      - ./services/traefik/dynamic:/etc/traefik/dynamic
+      - ./services/traefik/certs:/etc/traefik/certs
 
   portainer:
     image: portainer/portainer-ce:2.5.1-alpine
@@ -32,32 +30,28 @@ services:
     command:
       - "-H"
       - "unix:///var/run/docker.sock"
-      - "--admin-password=${PORTAINER_ADMIN_PASS}"
-    networks:
-      webgateway:
+    ports:
+      - 127.0.0.1:9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.portainer.rule=Host(`portainer.test`)"
-      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - portainer-data:/data
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
     restart: unless-stopped
+    ports:
+      - 127.0.0.1:8025:8025
+      - 127.0.0.1:1025:1025
     networks:
-      webgateway:
+      mailhog:
         aliases:
-          # mailtrap:1025
-          - mailtrap
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.mailhog.rule=Host(`mailtrap.test`)"
-      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+          - mailhog
 
 networks:
-  webgateway:
+  web:
+    external: true
+  mailhog:
+    external: true
 
 volumes:
-  portainer_data:
+  portainer-data:

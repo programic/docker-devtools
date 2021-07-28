@@ -7,17 +7,14 @@
    git clone https://bitbucket.org/programic/docker-devtools
    cd docker-devtools
    ```
-2. Copy the `.env.example` to `.env`:
+3. Create external networks
    ```bash
-   cp .env.example .env
+   docker network create web
+   docker network create mailhog
    ```
-   And fill in missing entries/change values to your liking.
-3. Start the proxy:
+3. Start dev-tools:
    ```bash
-   # for running in the background:
    docker-compose up -d
-   # for running in the foreground:
-   docker-compose up
    ```
 
 ### Trust the self-signed CA SSL certificate
@@ -25,7 +22,7 @@
 1. Add it to your MacOS Keychain:
    ```bash
    sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" \
-     ./services/traefik/files/etc/certs/programic-CA.crt
+     ./services/traefik/certs/programic-CA.crt
    ```
 2. Browser support:
    * Chrome: out of the box
@@ -37,17 +34,19 @@
    * Postman:
      * `Postman` > `Preference` > `Certificates`
        * CA Certificates: `ON`
-       * PEM file: `./services/traefik/files/etc/certs/programic-CA.pem`
+       * PEM file: `./services/traefik/certs/programic-CA.pem`
 
-## Traefik
+## Access services
 
-Can be reached via [http://proxy.test](http://proxy.test).
-
-## Portainer
-
-Can be reached via [http://portainer.test](http://portainer.test).
-
-## SSL
+1. Traefik:
+   - Web interface: [http://localhost:8080](http://localhost:8080)
+2. Portainer: 
+   - Web interface: [http://localhost:9000](http://localhost:9000)
+3. Mailhog: 
+   - Web interface: [http://localhost:8025](http://localhost:8025)
+   - SMTP: `mailhog:1025`
+    
+## How to creating a new tls certificate
 
 How the self-signed root CA was created:
 ```bash

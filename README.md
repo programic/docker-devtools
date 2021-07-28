@@ -16,6 +16,10 @@
    ```bash
    docker-compose up -d
    ```
+4. Add bin folder to your $PATH
+   ```bash
+   export PATH=$PATH:`pwd/bin`
+   ```
 
 ### Trust the self-signed CA SSL certificate
 

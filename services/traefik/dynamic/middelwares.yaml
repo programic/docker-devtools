@@ -1,0 +1,13 @@
+http:
+  middlewares:
+    secure-headers:
+      headers:
+        framedeny: true
+        sslredirect: true
+        contenttypenosniff: true
+        browserxssfilter: true
+        stsincludesubdomains: true
+        stspreload: true
+        stsseconds: 1536000
+        customResponseHeaders:
+          server: ''

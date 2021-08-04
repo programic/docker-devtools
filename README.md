@@ -49,6 +49,8 @@
 3. Mailhog: 
    - Web interface: [http://localhost:8025](http://localhost:8025)
    - SMTP: `mailhog:1025`
+4. Kolombo
+    - Web interface: [https://kolombo.pro.test](https://kolombo.pro.test)
     
 ## How to creating a new tls certificate
 

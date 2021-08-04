@@ -1,0 +1,204 @@
+#!/usr/bin/env bash
+
+UNAMEOUT="$(uname -s)"
+
+WHITE='\033[1;37m'
+NC='\033[0m'
+
+# Source the docker ".env" file
+if [ -f ./.env ]; then
+    source ./.env
+fi
+
+# Define environment variables...
+export APP_SERVICE=${APP_SERVICE:-'app'}
+
+
+# Ensure that Docker is running...
+if ! docker info > /dev/null 2>&1; then
+    echo -e "${WHITE}Docker is not running.${NC}" >&2
+
+    exit 1
+fi
+
+# Determine if Docker is currently up...
+PSRESULT="$(docker-compose ps)"
+if docker-compose ps | grep $APP_SERVICE | grep 'Exit'; then
+    echo -e "${WHITE}Shutting down old Docker processes...${NC}" >&2
+
+    docker-compose down > /dev/null 2>&1
+
+    EXEC="no"
+elif [ -n "$PSRESULT" ]; then
+    EXEC="yes"
+else
+    EXEC="no"
+fi
+
+# Function that outputs Sail is not running...
+function docker_is_not_running {
+    echo -e "${WHITE}Docker is not running.${NC}" >&2
+    echo "" >&2
+    echo -e "${WHITE}You may Docker using the following commands:${NC} 'docker-pro up -d'" >&2
+
+    exit 1
+}
+
+if [ $# -gt 0 ]; then
+    # Source the ".env" file so Laravel's environment variables are available...
+    if [ -f ./src/.env ]; then
+        source ./src/.env
+    fi
+
+    # Proxy PHP commands to the "php" binary on the application container...
+    if [ "$1" == "php" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                php "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy vendor binary commands on the application container...
+    elif [ "$1" == "bin" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+              "$APP_SERVICE" \
+              ./vendor/bin/"$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy Composer commands to the "composer" binary on the application container...
+    elif [ "$1" == "composer" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+              "$APP_SERVICE" \
+              composer "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy Artisan commands to the "artisan" binary on the application container...
+    elif [ "$1" == "artisan" ] || [ "$1" == "art" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                php artisan "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy the "test" command to the "php artisan test" Artisan command...
+    elif [ "$1" == "test" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                php artisan test "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy the "fresh" command to the "php artisan migrate:fresh --seed" Artisan command...
+    elif [ "$1" == "fresh" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                php artisan migrate:fresh --seed "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Initiate a Laravel Tinker session within the application container...
+    elif [ "$1" == "tinker" ] ; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                php artisan tinker
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy NPM commands to the "npm" binary on the application container...
+    elif [ "$1" == "npm" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                npm "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy NPX commands to the "npx" binary on the application container...
+    elif [ "$1" == "npx" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                npx "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Proxy YARN commands to the "yarn" binary on the application container...
+    elif [ "$1" == "yarn" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                yarn "$@"
+        else
+            docker_is_not_running
+        fi
+
+    # Initiate a MySQL CLI terminal session within the "mysql" container...
+    elif [ "$1" == "mysql" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                mysql \
+                bash -c 'MYSQL_PWD=${MYSQL_PASSWORD} mysql -u ${MYSQL_USER} ${MYSQL_DATABASE}'
+        else
+            docker_is_not_running
+        fi
+
+    # Initiate a Bash shell within the application container...
+    elif [ "$1" == "shell" ] || [ "$1" == "bash" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            docker-compose exec \
+                "$APP_SERVICE" \
+                bash
+        else
+            docker_is_not_running
+        fi
+
+     # Pass unknown commands to the "docker-compose" binary...
+    else
+        docker-compose "$@"
+    fi
+
+else
+    docker-compose ps
+fi

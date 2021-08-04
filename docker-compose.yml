@@ -47,10 +47,34 @@ services:
         aliases:
           - mailhog
 
+  kolombo:
+    build:
+      context: ./services/kolombo
+      dockerfile: ./Dockerfile
+    networks:
+      kolombo:
+        aliases:
+          - kolombo
+      web:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-https.rule=Host(`kolombo.pro.test`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-https.entrypoints=websecure"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-https.middlewares=secure-headers@file"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-https.tls=true"
+    environment:
+      KOLOMBO_VAPID_PUBLIC_KEY: "${KOLOMBO_VAPID_PUBLIC_KEY}"
+      KOLOMBO_VAPID_PRIVATE_KEY: "${KOLOMBO_VAPID_PRIVATE_KEY}"
+      KOLOMBO_SUBSCRIPTION: "${KOLOMBO_SUBSCRIPTION}"
+    volumes:
+      - ./services/traefik/certs:/etc/certs/custom
+
 networks:
   web:
     external: true
   mailhog:
+    external: true
+  kolombo:
     external: true
 
 volumes:

@@ -11,8 +11,9 @@ if [ -f ./.env ]; then
 fi
 
 # Define environment variables...
-export APP_SERVICE=${APP_SERVICE:-'app'}
-
+APP_SERVICE=${APP_SERVICE:-'app'}
+NGINX_SERVICE=${NGINX_SERVICE:-$(docker-compose ps | grep nginx | awk '{print $1}')}
+NGINX_NETWORK_NAME=${NGINX_NETWORK_NAME:-"${COMPOSE_PROJECT_NAME}_network"}
 
 # Ensure that Docker is running...
 if ! docker info > /dev/null 2>&1; then
@@ -190,6 +191,40 @@ if [ $# -gt 0 ]; then
             docker-compose exec \
                 "$APP_SERVICE" \
                 bash
+        else
+            docker_is_not_running
+        fi
+
+    # Initiate a ngrok tunnel
+    elif [ "$1" == "ngrok" ] || [ "$1" == "public" ]; then
+        shift 1
+
+        if [ "$EXEC" == "yes" ]; then
+            if [ "$1" == "domain" ]; then
+              shift 1
+
+              if [ -z "$NGROK_AUTH" ]; then
+                echo ngrok authtoken not defined. Fill in the ngrok authtoken:
+                read NGROK_AUTH
+              fi
+
+              docker run --rm -it \
+                --net="$NGINX_NETWORK_NAME" \
+                -e NGROK_PORT="$NGINX_SERVICE" \
+                -e NGROK_REGION="eu" \
+                -e NGROK_AUTH="$NGROK_AUTH" \
+                -e NGROK_SUBDOMAIN="$COMPOSE_PROJECT_NAME" \
+                "$@" \
+                wernight/ngrok
+            else
+              docker run --rm -it \
+                --net="$NGINX_NETWORK_NAME" \
+                -e NGROK_PORT="$NGINX_SERVICE" \
+                -e NGROK_REGION="eu" \
+                "$@" \
+                wernight/ngrok
+            fi
+
         else
             docker_is_not_running
         fi

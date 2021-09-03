@@ -214,14 +214,12 @@ if [ $# -gt 0 ]; then
                 -e NGROK_REGION="eu" \
                 -e NGROK_AUTH="$NGROK_AUTH" \
                 -e NGROK_SUBDOMAIN="$COMPOSE_PROJECT_NAME" \
-                "$@" \
                 wernight/ngrok
             else
               docker run --rm -it \
                 --net="$NGINX_NETWORK_NAME" \
                 -e NGROK_PORT="$NGINX_SERVICE" \
                 -e NGROK_REGION="eu" \
-                "$@" \
                 wernight/ngrok
             fi
 

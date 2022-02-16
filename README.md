@@ -23,7 +23,7 @@
    # ZSH as shell
    nano ~/.zshrc
    
-   # Add to the bottom of this file, and change the path to your docker-devtools folder
+   # Add this to the bottom of this file, and change the path to your docker-devtools folder
    export PATH="${PATH}:/home/remco/code/docker-devtools/bin"
    ```
 

@@ -1,7 +1,6 @@
 # Docker local development environment
 
 ## To get started
-
 1. Clone the [repository](https://bitbucket.org/programic/docker-devtools).
    ```bash
    git clone https://bitbucket.org/programic/docker-devtools
@@ -22,7 +21,6 @@
    ```
 
 ### Trust the self-signed CA SSL certificate
-
 1. Add it to your MacOS Keychain:
    ```bash
    sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" \
@@ -40,8 +38,15 @@
        * CA Certificates: `ON`
        * PEM file: `./services/traefik/certs/programic-CA.pem`
 
-## Access services
+### Installing the NrdSSH client (Alias 's')
+[NrdSSH client screenshot](readme-assets/nrdssh-client.png)
 
+1. Installing the `dialog` package
+   1. Ubuntu: `sudo apt install dialog`
+   2. MacOS: `brew install dialog`
+2. Open the NrdSSH client by running `s` in your terminal
+
+## Access services
 1. Traefik:
    - Web interface: [http://localhost:8080](http://localhost:8080)
 2. Portainer: 
@@ -51,8 +56,8 @@
    - SMTP: `mailhog:1025`
     
 ## How to creating a new tls certificate
-
 How the self-signed root CA was created:
+
 ```bash
 # install and use openssl, since MacOS comes with a very old LibreSSL
 brew install openssl
@@ -76,6 +81,7 @@ sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.key
 ```
 
 Then, a self-signed wildcard certificate was created:
+
 ```bash
 # created a key to sign the certificates/csr's with
 openssl genrsa -out pro.test.key 2048

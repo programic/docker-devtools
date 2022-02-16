@@ -38,7 +38,7 @@
        * CA Certificates: `ON`
        * PEM file: `./services/traefik/certs/programic-CA.pem`
 
-### Installing the NrdSSH client (Alias 's')
+### Installing the NrdSSH client (Alias `s`)
 [NrdSSH client screenshot](readme-assets/nrdssh-client.png)
 
 1. Installing the `dialog` package

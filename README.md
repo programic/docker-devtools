@@ -41,9 +41,7 @@
 ### Installing the NrdSSH client (Alias `s`)
 ![NrdSSH client screenshot](readme-assets/nrdssh-client.png)
 
-1. Installing the `dialog` package
-   1. Ubuntu: `sudo apt install dialog`
-   2. MacOS: `brew install dialog`
+1. Installing the `dialog` package: Ubuntu `sudo apt install dialog`, MacOS `brew install dialog`
 2. Open the NrdSSH client by running `s` in your terminal
 
 ## Access services

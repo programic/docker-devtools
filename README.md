@@ -15,9 +15,16 @@
    ```bash
    docker-compose up -d
    ```
-4. Add bin folder to your $PATH
+4. Add the bin folder to your $PATH
    ```bash
-   export PATH=$PATH:`pwd/bin`
+   # Bash as shell
+   nano ~/.bashrc 
+   
+   # ZSH as shell
+   nano ~/.zshrc
+   
+   # Add to the bottom of this file, and change the path to your docker-devtools folder
+   export PATH="${PATH}:/home/remco/code/docker-devtools/bin"
    ```
 
 ### Trust the self-signed CA SSL certificate

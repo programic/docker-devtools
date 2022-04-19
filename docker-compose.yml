@@ -22,7 +22,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./services/traefik/dynamic:/etc/traefik/dynamic
-      - ./services/traefik/certs:/etc/traefik/certs
+      - ./services/traefik/certs/output:/etc/traefik/certs
 
   portainer:
     image: portainer/portainer-ce:2.5.1-alpine

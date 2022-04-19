@@ -1,0 +1,37 @@
+#!/bin/bash
+
+######################
+## NrdSSH client
+######################
+
+cmd=(dialog --keep-tite --menu "Select a server" 0 0 0)
+
+options=(1 "programic@backup-1.programic.cloud"
+         2 "programic@prod-11.programic.cloud"
+         3 "programic@prod-dela-1.programic.cloud"
+         4 "programic@prod-auto-1.programic.cloud"
+         5 "programic@prod-kenn-1.programic.cloud"
+         6 "programic@prod-wgm-1.programic.cloud"
+         7 "programic@prod-pro-1.programic.cloud"
+         8 "programic@release-2.programic.cloud"
+         9 "programic@test-4.programic.cloud"
+         10 "ubuntu@test-3.programic.com"
+         11 "ubuntu@release-1.programic.com"
+         12 "ubuntu@vpn-1.programic.com"
+         13 "ubuntu@web-4.programic.com"
+         14 "ubuntu@web-8.programic.com"
+         15 "ubuntu@web-10.programic.com"
+         16 "ubuntu@web-1.cluster-2.programic.com"
+         17 "ubuntu@web-2.cluster-2.programic.com"
+         18 "ubuntu@dicom-1.cluster-2.programic.com")
+
+choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
+
+if [ -z "$choice" ]; then
+  exit 1
+fi
+
+item="${options[(${choice} * 2) - 1]}"
+
+echo "Connecting to ${item}..."
+ssh ${item}

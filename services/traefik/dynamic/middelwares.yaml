@@ -2,7 +2,6 @@ http:
   middlewares:
     secure-headers:
       headers:
-        framedeny: true
         sslredirect: true
         contenttypenosniff: true
         browserxssfilter: true

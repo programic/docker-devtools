@@ -2,6 +2,7 @@ http:
   middlewares:
     secure-headers:
       headers:
+        contentSecurityPolicy: "frame-ancestors 'self'"
         sslredirect: true
         contenttypenosniff: true
         browserxssfilter: true

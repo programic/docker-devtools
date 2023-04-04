@@ -1,33 +1,50 @@
 #!/usr/bin/env bash
 
 ######
+## Enter all wildcard certificates that need to be created
+######
+
+certificates=(
+  pro.test
+  auto.test
+  kenniss.test
+)
+
+######
 ## Generate CA
 ######
 
+echo -e "Generate CA"
+
 # created a key to sign the certificates/csr's with
-openssl genrsa -aes256 -passout pass:programic -out programic-CA.key 4096
+openssl genrsa -aes256 -passout pass:programic -out programic-ca.key 4096
 
 # created a root CA CSR
-openssl req -new -passin pass:programic -key programic-CA.key -out programic-CA.csr \
+openssl req -new -passin pass:programic -key programic-ca.key -out programic-ca.csr \
   -subj "/C=NL/ST=Overijssel/L=Deventer/O=Programic/OU=Development/CN=programic.com/emailAddress=development@programic.com"
 
 # create a root CA certificate
-openssl x509 -req -sha256 -passin pass:programic -days 365 -in programic-CA.csr -signkey programic-CA.key -out programic-CA.crt
-
+openssl x509 -req -sha256 -passin pass:programic -days 365 -in programic-ca.csr -signkey programic-ca.key -out programic-ca.crt
 
 ######
-## Generate *.pro.test cert
+## Generate certificates
 ######
-openssl genrsa -out pro.test.key 2048
 
-# created a csr for the wildcard certificate
-openssl req -new -key pro.test.key -out pro.test.csr \
-  -subj "/C=NL/ST=Overijssel/L=Deventer/O=Programic/OU=Development/CN=pro.test/emailAddress=development@programic.com" \
-  -addext 'subjectAltName=DNS:*.pro.test'
+for certificate in "${certificates[@]}"
+do
+  echo -e "\nGenerate ${certificate}..."
 
-# created the self-signed wildcard
-openssl x509 -req -sha256 -passin pass:programic -days 365 -in pro.test.csr -CA programic-CA.crt -CAkey programic-CA.key -CAcreateserial \
-  -extfile <(printf "subjectAltName=DNS:*.pro.test") -out pro.test.crt
+  openssl genrsa -out ${certificate}.key 2048
 
-# created a certificate bundle
-cat pro.test.crt programic-CA.crt > pro.test-bundle.crt
+  # created a csr for the wildcard certificate
+  openssl req -new -key ${certificate}.key -out ${certificate}.csr \
+    -subj "/C=NL/ST=Overijssel/L=Deventer/O=Programic/OU=Development/CN=${certificate}/emailAddress=development@programic.com" \
+    -addext "subjectAltName=DNS:*.${certificate}"
+
+  # created the self-signed wildcard
+  openssl x509 -req -sha256 -passin pass:programic -days 365 -in ${certificate}.csr -CA programic-ca.crt -CAkey programic-ca.key -CAcreateserial \
+    -extfile <(printf "subjectAltName=DNS:*.${certificate}") -out ${certificate}.crt
+
+  # created a certificate bundle
+  cat ${certificate}.crt programic-ca.crt > ${certificate}-bundle.crt
+done

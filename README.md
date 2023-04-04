@@ -30,7 +30,7 @@
 ### Trust the self-signed CA SSL certificate
 1. Add it to your MacOS Keychain:
    ```bash
-   sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" ./services/traefik/certs/output/programic-CA.crt
+   sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" ./services/traefik/certs/output/programic-ca.crt
    ```
 2. Browser support:
    * Chrome: out of the box

@@ -1,0 +1,14 @@
+providers:
+  file:
+    directory: /dynamic
+  docker:
+    watch: true
+    exposedByDefault: false
+    network: web
+entryPoints:
+  web:
+    address: ':80'
+  websecure:
+    address: ':443'
+api:
+  insecure: true

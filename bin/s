@@ -16,13 +16,11 @@ options=(1 "programic@backup-1.programic.cloud"
          8 "programic@prod-pro-1.programic.cloud"
          9 "programic@release-2.programic.cloud"
          10 "programic@test-4.programic.cloud"
-         11 "ubuntu@test-3.programic.com"
-         12 "ubuntu@release-1.programic.com"
-         13 "ubuntu@vpn-1.programic.com"
-         14 "ubuntu@web-4.programic.com"
-         15 "ubuntu@web-1.cluster-2.programic.com"
-         16 "ubuntu@web-2.cluster-2.programic.com"
-         17 "ubuntu@dicom-1.cluster-2.programic.com")
+         11 "ubuntu@vpn-1.programic.com"
+         12 "ubuntu@web-4.programic.com"
+         13 "ubuntu@web-1.cluster-2.programic.com"
+         14 "ubuntu@web-2.cluster-2.programic.com"
+         15 "ubuntu@dicom-1.cluster-2.programic.com")
 
 choice=$("${cmd[@]}" "${options[@]}" 2>&1 >/dev/tty)
 

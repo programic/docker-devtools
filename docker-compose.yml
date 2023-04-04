@@ -2,16 +2,7 @@ version: '3.8'
 
 services:
   traefik:
-    image: traefik:v2.4
-    command:
-#      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--providers.docker.network=web"
-      - "--providers.docker.watch=true"
-      - "--providers.file.directory=/etc/traefik/dynamic"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+    image: traefik:v2.9
     restart: unless-stopped
     ports:
       - 127.0.0.1:80:80
@@ -21,8 +12,9 @@ services:
       - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./services/traefik/dynamic:/etc/traefik/dynamic
-      - ./services/traefik/certs/output:/etc/traefik/certs
+      - ./services/traefik/traefik.yaml:/traefik.yaml
+      - ./services/traefik/dynamic:/dynamic
+      - ./services/traefik/certs/output:/certs
 
   portainer:
     image: portainer/portainer-ce:2.5.1-alpine

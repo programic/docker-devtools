@@ -28,17 +28,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
 
-  mailhog:
-    image: mailhog/mailhog:v1.0.1
-    restart: unless-stopped
-    ports:
-      - 127.0.0.1:8025:8025
-      - 127.0.0.1:1025:1025
-    networks:
-      mailhog:
-        aliases:
-          - mailhog
-
 networks:
   web:
     external: true

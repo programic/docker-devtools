@@ -32,6 +32,11 @@
    ```bash
    sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" ./services/traefik/certs/output/programic-ca.crt
    ```
+   for Ubuntu:
+   ```bash
+   sudo cp ./services/traefik/certs/output/programic-ca.crt /usr/local/share/ca-certificates
+   sudo update-ca-certificates
+   ```
 2. Browser support:
    * Chrome: out of the box
    * Safari: out of the box

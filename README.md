@@ -38,7 +38,10 @@
    sudo update-ca-certificates
    ```
 2. Browser support:
-   * Chrome: out of the box
+   * Chrome: out of the box, except for Ubuntu. Chrome does not support system installed certificates anymore, 
+   which is why .crt files in the Ubuntu filesystem will be recognized, but not accepted. After installing the files, 
+   go to Chrome, `Settings` > `Privacy and Security` > `Security` > `Manage Certificates`. Add the output .crt files to
+   to the tab `Servers`. They will then appear in the `Others` section.
    * Safari: out of the box
    * Firefox:
       * `about:config` > `security.enterprise_roots.enabled`: `true`

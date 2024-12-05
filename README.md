@@ -71,3 +71,18 @@
 1. First build the Docker image to generate the Programic developer certificates. Navigate to `cd services/traefik/certs/docker` and run `bash build.sh`
 2. Navigate to its parent directory `cd ..` and run the Docker image you just build: `bash generate.sh`
 3. Done. The certificates are saved in the `output` directory. Commit your changes.
+
+# Digital Ocean Spaces configuration
+```bash
+cd bin/do-spaces-config
+
+docker run --rm -it \
+   -e AWS_ENDPOINT_URL=https://ams3.digitaloceanspaces.com \
+   -e AWS_ACCESS_KEY_ID=[your_access_key_id] \
+   -e AWS_SECRET_ACCESS_KEY=[your_secret_access_key] \
+   -e S3_BUCKET=[your_s3_bucket] \
+   -v $(pwd):/aws \
+   --entrypoint /bin/bash \
+   amazon/aws-cli \
+   enable-versioning.sh
+```

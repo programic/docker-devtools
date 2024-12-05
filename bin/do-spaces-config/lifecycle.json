@@ -1,0 +1,12 @@
+{
+  "Rules": [
+    {
+      "ID": "Permanently delete non-current versions after 30 days",
+      "Prefix": "",
+      "Status": "Enabled",
+      "NoncurrentVersionExpiration": {
+        "NoncurrentDays": 30
+      }
+    }
+  ]
+}

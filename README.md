@@ -71,6 +71,3 @@
 1. First build the Docker image to generate the Programic developer certificates. Navigate to `cd services/traefik/certs/docker` and run `bash build.sh`
 2. Navigate to its parent directory `cd ..` and run the Docker image you just build: `bash generate.sh`
 3. Done. The certificates are saved in the `output` directory. Commit your changes.
-
-## Known issues, docker desktop version
-Docker desktop -> instellingen -> "Docker Engine" -> add to json: "min-api-version": "1.24"

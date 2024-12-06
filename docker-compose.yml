@@ -1,8 +1,6 @@
-version: '3.8'
-
 services:
   traefik:
-    image: traefik:v2.9
+    image: traefik:v3.2
     restart: unless-stopped
     ports:
       - 127.0.0.1:80:80
@@ -17,7 +15,7 @@ services:
       - ./services/traefik/certs/output:/certs
 
   portainer:
-    image: portainer/portainer-ce:2.5.1-alpine
+    image: portainer/portainer-ce:2.24.1-alpine
     restart: unless-stopped
     command:
       - "-H"
@@ -28,11 +26,29 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
 
+  localstack:
+    image: localstack/localstack:4.0
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.localstack.rule=Host(`localstack.pro.test`)"
+      - "traefik.http.services.localstack.loadbalancer.server.port=4566"
+      - "traefik.http.routers.localstack.entrypoints=websecure"
+      - "traefik.http.routers.localstack.tls=true"
+    environment:
+      - PERSISTENCE=1
+    networks:
+      - localstack
+      - web
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - localstack-data:/var/lib/localstack
+
 networks:
   web:
     external: true
-  mailhog:
+  localstack:
     external: true
 
 volumes:
   portainer-data:
+  localstack-data:

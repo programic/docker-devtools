@@ -1,4 +1,4 @@
-# Docker local development environment
+# 1. Docker local development environment
 
 ## To get started
 1. Clone the [repository](https://bitbucket.org/programic/docker-devtools).
@@ -9,11 +9,11 @@
 3. Create external networks
    ```bash
    docker network create web
-   docker network create mailhog
+   docker network create localstack
    ```
 3. Start dev-tools:
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 4. Add the bin folder to your $PATH
    ```bash
@@ -63,16 +63,39 @@
    - Web interface: [http://localhost:8080](http://localhost:8080)
 2. Portainer: 
    - Web interface: [http://localhost:9000](http://localhost:9000)
-3. Mailhog: 
-   - Web interface: [http://localhost:8025](http://localhost:8025)
-   - SMTP: `mailhog:1025`
     
 ## How to renew the Programic developer certificate?
 1. First build the Docker image to generate the Programic developer certificates. Navigate to `cd services/traefik/certs/docker` and run `bash build.sh`
 2. Navigate to its parent directory `cd ..` and run the Docker image you just build: `bash generate.sh`
 3. Done. The certificates are saved in the `output` directory. Commit your changes.
 
-# Digital Ocean Spaces configuration
+## Setup local S3 with LocalStack
+
+1. Create a S3 bucket for your project:
+   ```bash
+   docker compose exec localstack awslocal s3api create-bucket --bucket [your-bucket-name]
+   ```
+2. Test the connection and check if the bucket has been created:
+   ```bash
+   docker run --rm -it --network localstack \
+      -e AWS_ENDPOINT_URL=http://localstack:4566 \
+      -e AWS_ACCESS_KEY_ID=test \
+      -e AWS_SECRET_ACCESS_KEY=test \
+      amazon/aws-cli \
+      s3 ls
+   ```
+3. Configure Laravel filesystem to connect to S3:
+   ```bash
+   AWS_ENDPOINT=http://localstack:4566
+   AWS_URL=https://localstack.pro.test
+   AWS_ACCESS_KEY_ID=test
+   AWS_SECRET_ACCESS_KEY=test
+   AWS_DEFAULT_REGION=eu-central-1
+   AWS_USE_PATH_STYLE_ENDPOINT=true
+   AWS_BUCKET=[your-bucket-name]
+   ```
+
+# 2. Digital Ocean Spaces configuration
 ```bash
 cd bin/do-spaces-config
 

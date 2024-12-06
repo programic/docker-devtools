@@ -59,10 +59,8 @@
 2. Open the NrdSSH client by running `s` in your terminal
 
 ## Access services
-1. Traefik:
-   - Web interface: [http://localhost:8080](http://localhost:8080)
-2. Portainer: 
-   - Web interface: [http://localhost:9000](http://localhost:9000)
+1. Traefik: [http://localhost:8080](http://localhost:8080)
+2. Portainer: [http://localhost:9000](http://localhost:9000)
     
 ## How to renew the Programic developer certificate?
 1. First build the Docker image to generate the Programic developer certificates. Navigate to `cd services/traefik/certs/docker` and run `bash build.sh`

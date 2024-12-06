@@ -82,7 +82,24 @@
       amazon/aws-cli \
       s3 ls
    ```
-3. Configure Laravel filesystem to connect to S3:
+3. Edit the local `docker-compose.yml` file of your project:
+   ```yml
+   php:
+    ...
+    networks:
+      localstack: // Add the container to the LocalStack network
+
+   worker:
+    ...
+    networks:
+      localstack: // Add the container to the LocalStack network
+
+   scheduler:
+    ...
+    networks:
+      localstack: // Add the container to the LocalStack network
+   ```
+4. Configure Laravel filesystem to connect to LocalStack S3:
    ```bash
    AWS_ENDPOINT=http://localstack:4566
    AWS_URL=https://localstack.pro.test

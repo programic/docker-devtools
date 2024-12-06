@@ -1,4 +1,4 @@
-# Docker local development environment
+# 1. Docker local development environment
 
 ## To get started
 1. Clone the [repository](https://bitbucket.org/programic/docker-devtools).
@@ -9,11 +9,11 @@
 3. Create external networks
    ```bash
    docker network create web
-   docker network create mailhog
+   docker network create localstack
    ```
 3. Start dev-tools:
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 4. Add the bin folder to your $PATH
    ```bash

@@ -84,20 +84,19 @@
    ```
 3. Edit the local `docker-compose.yml` file of your project:
    ```yml
-   php:
-    ...
-    networks:
-      localstack: // Add the container to the LocalStack network
-
-   worker:
-    ...
-    networks:
-      localstack: // Add the container to the LocalStack network
-
-   scheduler:
-    ...
-    networks:
-      localstack: // Add the container to the LocalStack network
+   services:
+       php:
+           networks:
+               localstack: # Add the container to the LocalStack network
+       worker:
+           networks:
+               localstack: # Add the container to the LocalStack network
+       scheduler:
+           networks:
+               localstack: # Add the container to the LocalStack network
+   networks:
+       localstack: # Define the LocalStack network
+           external: true
    ```
 4. Configure Laravel filesystem to connect to LocalStack S3:
    ```bash

@@ -24,7 +24,7 @@ openssl req -new -passin pass:programic -key programic-ca.key -out programic-ca.
   -subj "/C=NL/ST=Overijssel/L=Deventer/O=Programic/OU=Development/CN=programic.com/emailAddress=development@programic.com"
 
 # create a root CA certificate
-openssl x509 -req -sha256 -passin pass:programic -days 365 -in programic-ca.csr -signkey programic-ca.key -out programic-ca.crt
+openssl x509 -req -sha256 -passin pass:programic -days 365 -in programic-ca.csr -signkey programic-ca.key -extfile programic-ca.ext -out programic-ca.crt
 
 ######
 ## Generate certificates

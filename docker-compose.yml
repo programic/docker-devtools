@@ -8,44 +8,69 @@ services:
       - 127.0.0.1:8080:8080
     networks:
       - web
+      - default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./services/traefik/traefik.yaml:/traefik.yaml
       - ./services/traefik/dynamic:/dynamic
       - ./services/traefik/certs/output:/certs
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik-server-http.rule=Host(`traefik.pro.test`)"
+      - "traefik.http.routers.traefik-server-http.entrypoints=web"
+      - "traefik.http.routers.traefik-server-http.middlewares=secure-headers@file"
+      - "traefik.http.routers.traefik-server.rule=Host(`traefik.pro.test`)"
+      - "traefik.http.routers.traefik-server.entrypoints=websecure"
+      - "traefik.http.routers.traefik-server.middlewares=secure-headers@file"
+      - "traefik.http.routers.traefik-server.tls=true"
+      - "traefik.http.services.traefik-server.loadbalancer.server.port=8080"
 
   portainer:
-    image: portainer/portainer-ce:2.24.1-alpine
+    image: portainer/portainer-ce:2.29.2-alpine
     restart: unless-stopped
     ports:
       - 127.0.0.1:9000:9000
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
-
-  localstack:
-    image: localstack/localstack:4.0
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.localstack.rule=Host(`localstack.pro.test`)"
-      - "traefik.http.services.localstack.loadbalancer.server.port=4566"
-      - "traefik.http.routers.localstack.entrypoints=websecure"
-      - "traefik.http.routers.localstack.tls=true"
-    environment:
-      - PERSISTENCE=1
+      - "traefik.http.routers.portainer-server-http.rule=Host(`portainer.pro.test`)"
+      - "traefik.http.routers.portainer-server-http.entrypoints=web"
+      - "traefik.http.routers.portainer-server-http.middlewares=secure-headers@file"
+      - "traefik.http.routers.portainer-server.rule=Host(`portainer.pro.test`)"
+      - "traefik.http.routers.portainer-server.entrypoints=websecure"
+      - "traefik.http.routers.portainer-server.middlewares=secure-headers@file"
+      - "traefik.http.routers.portainer-server.tls=true"
+      - "traefik.http.services.portainer-server.loadbalancer.server.port=9000"
+
+  jaeger:
+    image: jaegertracing/jaeger:latest
+    restart: unless-stopped
+    ports:
+      - 16686:16686
+      - 4317:4317
+      - 4318:4318
+      - 5778:5778
+      - 9411:9411
     networks:
-      - localstack
-      - web
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - localstack-data:/var/lib/localstack
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.jaeger-server-http.rule=Host(`jaeger.pro.test`)"
+      - "traefik.http.routers.jaeger-server-http.entrypoints=web"
+      - "traefik.http.routers.jaeger-server-http.middlewares=secure-headers@file"
+      - "traefik.http.routers.jaeger-server.rule=Host(`jaeger.pro.test`)"
+      - "traefik.http.routers.jaeger-server.entrypoints=websecure"
+      - "traefik.http.routers.jaeger-server.middlewares=secure-headers@file"
+      - "traefik.http.routers.jaeger-server.tls=true"
+      - "traefik.http.services.jaeger-server.loadbalancer.server.port=16686"
 
 networks:
+  default:
+    external: false
   web:
-    external: true
-  localstack:
     external: true
 
 volumes:
   portainer-data:
-  localstack-data:

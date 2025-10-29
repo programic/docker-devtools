@@ -6,6 +6,8 @@ tls:
       keyFile: /certs/auto.test.key
     - certFile: /certs/kenniss.test-bundle.crt
       keyFile: /certs/kenniss.test.key
+    - certFile: /certs/net-os.test-bundle.crt
+      keyFile: /certs/net-os.test.key
   options:
     mintls13:
       minVersion: VersionTLS13

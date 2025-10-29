@@ -43,6 +43,9 @@
      * `Postman` > `Preference` > `Certificates`
        * CA Certificates: `ON`
        * PEM file: `./services/traefik/certs/output/programic-CA.pem`
+4. Mobile devices:
+   * Export the `programic-ca.crt` file and install it on your mobile device as a trusted CA certificate.
+   * Drag/Drop the `programic-ca.crt` file into the emulator/simulator.
 
 ### Installing the NrdSSH client (Alias `s`)
 ![NrdSSH client screenshot](readme-assets/nrdssh-client.png)
@@ -55,9 +58,6 @@
    - Web interface: [http://localhost:8080](http://localhost:8080)
 2. Portainer: 
    - Web interface: [http://localhost:9000](http://localhost:9000)
-3. Mailhog: 
-   - Web interface: [http://localhost:8025](http://localhost:8025)
-   - SMTP: `mailhog:1025`
     
 ## How to renew the Programic developer certificate?
 1. First build the Docker image to generate the Programic developer certificates. Navigate to `cd services/traefik/certs/docker` and run `bash build.sh`

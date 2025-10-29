@@ -8,6 +8,7 @@ certificates=(
   pro.test
   auto.test
   kenniss.test
+  net-os.test
 )
 
 ######

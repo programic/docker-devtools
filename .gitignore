@@ -2,3 +2,5 @@
 .idea
 docker-compose.override.yml
 .env
+
+!services/traefik/certs/output/*

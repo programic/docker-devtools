@@ -1,14 +1,13 @@
 services:
   traefik:
-    image: traefik:v3.2
+    image: traefik:v3.6
     restart: unless-stopped
     ports:
-      - 127.0.0.1:80:80
-      - 127.0.0.1:443:443
+      - 80:80
+      - 443:443
       - 127.0.0.1:8080:8080
     networks:
       - web
-      - default
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./services/traefik/traefik.yaml:/traefik.yaml
@@ -30,6 +29,8 @@ services:
     restart: unless-stopped
     ports:
       - 127.0.0.1:9000:9000
+    networks:
+      - web
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer-data:/data
@@ -54,7 +55,7 @@ services:
       - 5778:5778
       - 9411:9411
     networks:
-      - default
+      - web
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jaeger-server-http.rule=Host(`jaeger.pro.test`)"
@@ -67,8 +68,6 @@ services:
       - "traefik.http.services.jaeger-server.loadbalancer.server.port=16686"
 
 networks:
-  default:
-    external: false
   web:
     external: true
 

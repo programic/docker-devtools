@@ -11,3 +11,7 @@ http:
         stsseconds: 1536000
         customResponseHeaders:
           server: ''
+    cloudflarewarp:
+      plugin:
+        cloudflarewarp:
+          disableDefault: false

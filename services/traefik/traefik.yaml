@@ -10,11 +10,22 @@ providers:
 entryPoints:
   web:
     address: ':80'
+    http:
+      middlewares:
+        - cloudflarewarp@file
   websecure:
     address: ':443'
+    http:
+      middlewares:
+        - cloudflarewarp@file
 api:
   insecure: true
 tracing:
   otlp:
     http:
       endpoint: http://jaeger:4318/v1/traces
+experimental:
+  plugins:
+    cloudflarewarp:
+      modulename: github.com/BetterCorp/cloudflarewarp
+      version: v1.3.0

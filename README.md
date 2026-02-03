@@ -1,4 +1,4 @@
-# Docker local development environment
+# 1. Docker local development environment
 
 ## To get started
 1. Clone the [repository](https://bitbucket.org/programic/docker-devtools).
@@ -9,11 +9,11 @@
 3. Create external networks
    ```bash
    docker network create web
-   docker network create mailhog
+   docker network create localstack
    ```
 3. Start dev-tools:
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 4. Add the bin folder to your $PATH
    ```bash
@@ -32,8 +32,16 @@
    ```bash
    sudo security add-trusted-cert -d -r trustRoot -k "/Library/Keychains/System.keychain" ./services/traefik/certs/output/programic-ca.crt
    ```
+   for Ubuntu:
+   ```bash
+   sudo cp ./services/traefik/certs/output/programic-ca.crt /usr/local/share/ca-certificates
+   sudo update-ca-certificates
+   ```
 2. Browser support:
-   * Chrome: out of the box
+   * Chrome: out of the box, except for Ubuntu. Chrome does not support system installed certificates anymore, 
+   which is why .crt files in the Ubuntu filesystem will be recognized, but not accepted. After installing the files, 
+   go to Chrome, `Settings` > `Privacy and Security` > `Security` > `Manage Certificates`. Add the output .crt files to
+   to the tab `Servers`. They will then appear in the `Others` section.
    * Safari: out of the box
    * Firefox:
       * `about:config` > `security.enterprise_roots.enabled`: `true`
@@ -54,15 +62,11 @@
 2. Open the NrdSSH client by running `s` in your terminal
 
 ## Access services
-1. Traefik:
-   - Web interface: [http://localhost:8080](http://localhost:8080)
-2. Portainer: 
-   - Web interface: [http://localhost:9000](http://localhost:9000)
+1. Traefik: [https://traefik.pro.test](https://traefik.pro.test)
+2. Portainer: [https://portainer.pro.test](https://portainer.pro.test)
+3. Jaeger: [https://jaeger.pro.test](https://jaeger.pro.test)
     
 ## How to renew the Programic developer certificate?
 1. First build the Docker image to generate the Programic developer certificates. Navigate to `cd services/traefik/certs/docker` and run `bash build.sh`
 2. Navigate to its parent directory `cd ..` and run the Docker image you just build: `bash generate.sh`
 3. Done. The certificates are saved in the `output` directory. Commit your changes.
-
-## Known issues, docker desktop version
-Docker desktop -> instellingen -> "Docker Engine" -> add to json: "min-api-version": "1.24"
